@@ -10,7 +10,8 @@
 #    docs.serverless.com
 #
 # Happy Coding!
-
+app: helloworld
+org: timoh512 
 service: workshop-cipa
 # app and org for use with dashboard.serverless.com
 #app: your-app-name
@@ -61,6 +62,12 @@ provider:
 functions:
   hello:
     handler: handler.hello
+    #Welcher Endpoint angesprochen wird:
+    events:
+      - http:
+          path: /hello
+          method: get
+
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
