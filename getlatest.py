@@ -9,6 +9,8 @@ dynamodb = boto3.resource('dynamodb')
 
 def getlatest(event, context):
     table = dynamodb.Table(os.environ['TABLE_NAME'])
+
+    #db.collection.find().limit(1).sort({$natural:-1})
     # result = table.query(KeyConditionExpression=Key('timestamp').eq('latest_entry_identifier'))
     result = table.scan()
     # create a response
