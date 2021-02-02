@@ -73,6 +73,13 @@ functions:
           path: /calc/nr1/{nr1}/nr2/{nr2}
           method: post
 
+  getlatest:
+    handler: getlatest.getlatest
+    #Welcher Endpoint angesprochen wird:
+    events:
+      - http:
+          path: /calc/latest
+          method: get
 
 
 #    The following are a few example events you can configure

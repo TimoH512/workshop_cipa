@@ -2,6 +2,7 @@ import json
 from audioop import add
 from decimal import Decimal
 import boto3
+from boto3.dynamodb.conditions import Key, Attr
 import os
 import time
 from datetime import datetime
@@ -43,7 +44,6 @@ def calculation(event, context):
 
     addToTable(statuscode, body, ressumm, resdiff, resprod, resquot, nr1, nr2)
     return response
-
 
 
 def addToTable(statuscode, body, ressumm,resdiff,resprod,resquot, nr1, nr2):
