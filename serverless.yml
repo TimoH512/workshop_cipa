@@ -44,7 +44,7 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: "*"
+      Resource: !GetAtt calcAcess.Arn
 
 
 
