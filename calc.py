@@ -51,9 +51,9 @@ def addToTable(statuscode, body, ressumm,resdiff,resprod,resquot, nr1, nr2):
     item = {
         'timestamp': str(time.time()),
         'statuscode': str(statuscode),
-        'ressumm': ressumm,
-        'resdiff': resdiff,
-        'resprod': resprod,
+        'ressumm': Decimal(ressumm),
+        'resdiff': Decimal(resdiff),
+        'resprod': Decimal(resprod),
         'resquot': Decimal(resquot),
         'nr1': nr1,
         'nr2': nr2,
