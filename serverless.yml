@@ -72,7 +72,7 @@ functions:
     handler: calc.calculation
     events:
       - http:
-          path: /calc
+          path: /calc/nr1/{nr1}/nr2/{nr2}
           method: get
 
 #    The following are a few example events you can configure
