@@ -10,7 +10,7 @@
 #    docs.serverless.com
 #
 # Happy Coding!
-app: helloworld
+app: workshopcipa 
 org: timoh512 
 service: workshop-cipa
 # app and org for use with dashboard.serverless.com
