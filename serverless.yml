@@ -30,25 +30,23 @@ provider:
 #  stage: dev
 #  region: us-east-1
 
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
-
 # you can define service wide environment variables here
-#  environment:
-#    TABLE_NAME: !Ref table  
+  environment:
+    TABLE_NAME: !Ref calcAcess  
+
+# you can add statements to the Lambda function's IAM Role here
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "*"
+
+
 
 # you can add packaging information here
 #package:
@@ -73,7 +71,9 @@ functions:
     events:
       - http:
           path: /calc/nr1/{nr1}/nr2/{nr2}
-          method: get
+          method: post
+
+
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
@@ -116,11 +116,30 @@ functions:
 #      variable2: value2
 
 # you can add CloudFormation resource templates here
-#resources:
-#  Resources:
-#    table: 
-#      Type: AWS::S3::Bucket 
-#      Properties:
+resources:
+  Resources:
+    calcAcess: 
+      Type: AWS::DynamoDB::Table 
+      Properties:
+        AttributeDefinitions:
+          - 
+            AttributeName: "timestamp"
+            AttributeType: "S"
+          - 
+            AttributeName: "statuscode"
+            AttributeType: "S"
+        KeySchema:
+            -
+              AttributeName: "timestamp"
+              KeyType: "HASH"
+            - 
+              AttributeName: "statuscode"
+              KeyType: "RANGE"
+
+        ProvisionedThroughput: 
+          ReadCapacityUnits: "1"
+          WriteCapacityUnits: "1"
+
 #        BucketName: my-new-bucket
 #  Outputs:
 #     NewOutput:
