@@ -48,7 +48,7 @@ provider:
 
 # you can define service wide environment variables here
 #  environment:
-#    variable1: value1
+#    TABLE_NAME: !Ref table  
 
 # you can add packaging information here
 #package:
@@ -118,8 +118,8 @@ functions:
 # you can add CloudFormation resource templates here
 #resources:
 #  Resources:
-#    NewResource:
-#      Type: AWS::S3::Bucket
+#    table: 
+#      Type: AWS::S3::Bucket 
 #      Properties:
 #        BucketName: my-new-bucket
 #  Outputs:
