@@ -41,12 +41,12 @@ def calculation(event, context):
         "body": json.dumps(body)
     }
 
-    addToTabel(statuscode, body, ressumm, resdiff, resprod, resquot, nr1, nr2)
+    addToTable(statuscode, body, ressumm, resdiff, resprod, resquot, nr1, nr2)
     return response
 
 
 
-def addToTabel(statuscode, body, ressumm,resdiff,resprod,resquot, nr1, nr2):
+def addToTable(statuscode, body, ressumm,resdiff,resprod,resquot, nr1, nr2):
     table = dynamodb.Table(os.environ['TABLE_NAME'])
     item = {
         'timestamp': str(time.time()),
