@@ -1,24 +1,21 @@
 import json
-from audioop import add
 from decimal import Decimal
 import boto3
-from boto3.dynamodb.conditions import Key, Attr
 import os
 import time
-from datetime import datetime
 
 dynamodb = boto3.resource('dynamodb')
 
 
 def calculation(event, context):
+    # Pfad Parameter auslesen
     nr1 = int(event['pathParameters']['nr1'])
     nr2 = int(event['pathParameters']['nr2'])
+
+    # JSON aus Request Body auslesen
     requestbody = json.loads(event.get('body'))
     requestbodynr1 = requestbody['nr1']
     requestbodynr2 = requestbody['nr2']
-
-
-    statuscode = 404
 
     try:
         ressumm = nr1 + nr2
@@ -32,6 +29,7 @@ def calculation(event, context):
             "statusCode": statuscode,
             "body": json.dumps(body)
         }
+        addToTable(statuscode, body, ressumm, resdiff, resprod, resquot, nr1, nr2)
         return response
 
     statuscode = 200
@@ -54,7 +52,8 @@ def calculation(event, context):
     return response
 
 
-def addToTable(statuscode, body, ressumm,resdiff,resprod,resquot, nr1, nr2):
+# Eintrag in die DynamoDB hinzufügen
+def addToTable(statuscode, body, ressumm, resdiff, resprod, resquot, nr1, nr2):
     table = dynamodb.Table(os.environ['TABLE_NAME'])
     item = {
         'timestamp': str(time.time()),
@@ -68,5 +67,3 @@ def addToTable(statuscode, body, ressumm,resdiff,resprod,resquot, nr1, nr2):
     }
 
     table.put_item(Item=item)
-
-

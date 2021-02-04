@@ -1,6 +1,5 @@
 import json
 import boto3
-from boto3.dynamodb.conditions import Key, Attr
 import os
 import decimal
 
@@ -20,7 +19,7 @@ def getlatest(event, context):
     }
     return response
 
-
+#Rückgabe von DynamoDB umwandeln damit JSON die Daten verarbeiten kann
 class DecimalEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, decimal.Decimal):

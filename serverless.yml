@@ -70,15 +70,16 @@ functions:
     handler: calc.calculation
     events:
       - http:
+          #Hier können über den Pfad Variablen übergeben werden
           path: /calc/nr1/{nr1}/nr2/{nr2}
           method: post
+          #Hier wird über den Request Body JSON mitgegeben
           request:
             parameters: 
               application/json: '{"nr1":"number","nr2":"number"}'         
 
   getlatest:
     handler: getlatest.getlatest
-    #Welcher Endpoint angesprochen wird:
     events:
       - http:
           path: /calc/latest
