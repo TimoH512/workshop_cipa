@@ -13,6 +13,9 @@ dynamodb = boto3.resource('dynamodb')
 def calculation(event, context):
     nr1 = int(event['pathParameters']['nr1'])
     nr2 = int(event['pathParameters']['nr2'])
+    requestbody = json.loads(event.get('body'))
+
+
     statuscode = 404
 
     try:
@@ -34,7 +37,8 @@ def calculation(event, context):
         "Summe": str(ressumm),
         "Differenz": str(resdiff),
         "Produkt": str(resprod),
-        "Quotient": str(resquot)
+        "Quotient": str(resquot),
+        "requestbody": requestbody
     }
 
     response = {

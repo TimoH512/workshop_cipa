@@ -72,6 +72,9 @@ functions:
       - http:
           path: /calc/nr1/{nr1}/nr2/{nr2}
           method: post
+          request:
+            parameters: 
+              application/json: '{"nr1":"number","nr2":"number"}'         
 
   getlatest:
     handler: getlatest.getlatest
