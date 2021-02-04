@@ -14,6 +14,8 @@ def calculation(event, context):
     nr1 = int(event['pathParameters']['nr1'])
     nr2 = int(event['pathParameters']['nr2'])
     requestbody = json.loads(event.get('body'))
+    requestbodynr1 = requestbody['nr1']
+    requestbodynr2 = requestbody['nr2']
 
 
     statuscode = 404
@@ -38,7 +40,9 @@ def calculation(event, context):
         "Differenz": str(resdiff),
         "Produkt": str(resprod),
         "Quotient": str(resquot),
-        "requestbody": requestbody
+        "requestbody": requestbody,
+        "requestbodynr1": requestbodynr1,
+        "requestbodynr2": requestbodynr2
     }
 
     response = {
