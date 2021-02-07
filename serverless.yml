@@ -79,10 +79,17 @@ functions:
               application/json: '{"nr1":"number","nr2":"number"}'         
 
   getlatest:
-    handler: getlatest.getlatest
+    handler: getlatest.getall
     events:
       - http:
-          path: /calc/latest
+          path: /calc/getall
+          method: get
+
+  nosql:
+    handler: nosqlquery.getKey
+    events:
+      - http:
+          path: /nosql/key/{key}
           method: get
 
 
