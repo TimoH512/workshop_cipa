@@ -44,7 +44,9 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: !GetAtt calcAcess.Arn
+      #Resource: !GetAtt calcAcess.Arn
+      #Damit auf den Index zugegriffen wird für Query in getLatestEntry - ansonsten AccesDenied auf Index
+      Resource: [!GetAtt calcAcess.Arn, !Join [ '/',[!GetAtt calcAcess.Arn,index/*]]]
 
 
 
@@ -92,6 +94,19 @@ functions:
           path: /nosql/key/{key}
           method: get
 
+  getitem:
+    handler: nosqlquery.getField
+    events:
+      - http:
+          path: /nosql/getfield
+          method: get
+
+  getLatestEntry:
+    handler: nosqlquery.getLatest
+    events:
+      - http:
+          path: /nosql/getLatest
+          method: get
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
@@ -144,7 +159,7 @@ resources:
             AttributeName: "timestamp"
             AttributeType: "S"
           - 
-            AttributeName: "statuscode"
+            AttributeName: "statuscode" #sortkey
             AttributeType: "S"
         KeySchema:
             -
@@ -155,8 +170,25 @@ resources:
               KeyType: "RANGE"
 
         ProvisionedThroughput: 
-          ReadCapacityUnits: "1"
-          WriteCapacityUnits: "1"
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+#Für GetLatest - Index anlegen zum sortieren
+        GlobalSecondaryIndexes:
+          - IndexName: calcAcess_Index1
+            KeySchema:
+            -
+              AttributeName: "statuscode"
+              KeyType: "HASH"
+            -
+              AttributeName: "timestamp"
+              KeyType: "RANGE"
+            Projection:
+              NonKeyAttributes: [nr1,nr2]
+              ProjectionType: INCLUDE
+            ProvisionedThroughput: 
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
 
 #        BucketName: my-new-bucket
 #  Outputs:
