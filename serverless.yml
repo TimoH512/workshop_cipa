@@ -33,6 +33,7 @@ provider:
 # you can define service wide environment variables here
   environment:
     TABLE_NAME: !Ref calcAcess  
+    SNS_NAME: sns2
 
 # you can add statements to the Lambda function's IAM Role here
   iamRoleStatements:
@@ -44,9 +45,12 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
+        - SNS:Publish
+        - sns:CreateTopic
       #Resource: !GetAtt calcAcess.Arn
       #Damit auf den Index zugegriffen wird für Query in getLatestEntry - ansonsten AccesDenied auf Index
-      Resource: [!GetAtt calcAcess.Arn, !Join [ '/',[!GetAtt calcAcess.Arn,index/*]]]
+      #Resource: [!GetAtt calcAcess.Arn, !Join [ '/',[!GetAtt calcAcess.Arn,index/*]]]
+      Resource: "*"
 
 
 
@@ -71,6 +75,7 @@ functions:
   calc:
     handler: calc.calculation
     events:
+      - sns: sns2
       - http:
           #Hier können über den Pfad Variablen übergeben werden
           path: /calc/nr1/{nr1}/nr2/{nr2}

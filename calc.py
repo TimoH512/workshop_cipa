@@ -4,8 +4,10 @@ import boto3
 import os
 import time
 
-dynamodb = boto3.resource('dynamodb')
 
+dynamodb = boto3.resource('dynamodb')
+sns = boto3.client('sns')
+sns_topic = sns.create_topic(Name=os.environ['SNS_NAME'])["TopicArn"]
 
 def calculation(event, context):
     # Pfad Parameter auslesen
@@ -16,6 +18,11 @@ def calculation(event, context):
     requestbody = json.loads(event.get('body'))
     requestbodynr1 = requestbody['nr1']
     requestbodynr2 = requestbody['nr2']
+
+    ressumm = 0
+    resdiff = 0
+    resprod = 0
+    resquot = 0
 
     try:
         ressumm = nr1 + nr2
@@ -30,6 +37,9 @@ def calculation(event, context):
             "body": json.dumps(body)
         }
         addToTable(statuscode, body, ressumm, resdiff, resprod, resquot, nr1, nr2)
+        sns.publish(TopicArn=sns_topic,
+                    Message="Zero Division Error ",
+                    Subject="Zero Division Error")
         return response
 
     statuscode = 200
